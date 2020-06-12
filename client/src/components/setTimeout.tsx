@@ -23,7 +23,7 @@ class setTimeout extends React.Component {
         var accessToken = getTokens();
         console.log(accessToken);
         var value = event.target.value;
-        fetch('/timeout?timeoutType='+value+"&accessToken="+accessToken.access_token+"&refreshToken="+accessToken.refresh_token);
+        fetch('http://192.168.178.39:5000/timeout?timeoutType='+value+"&accessToken="+accessToken.access_token+"&refreshToken="+accessToken.refresh_token);
     }
 
     render() {
