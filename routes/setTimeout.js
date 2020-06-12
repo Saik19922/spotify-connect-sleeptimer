@@ -50,6 +50,8 @@ router.get('/', cors(), async function (req, res, next) {
             break;
     }
 
+    console.log(startTime.toString());
+
     //TODO: Re-auth logic
     var job = schedule.scheduleJob({ start: startTime }, function() {
         spotifyApi.pause();
