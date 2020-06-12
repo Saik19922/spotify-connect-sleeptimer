@@ -14,21 +14,23 @@ function Auth() {
 }
 
 function checkAuth(history: any, code: string): any {
-    new Promise(function (resolve, reject) {
-        const url = '/authenticate?code=' + code;
-        fetch(url)
-            .then(res => res.json())
-            .then(data => {
-                console.log(data);
-                spotifyApi.setAccessToken(data.access_token);
-                accessToken = {
-                    access_token: data.access_token,
-                    refresh_token: data.refresh_token
-                }
-                loggedIn = true;
-                history.push("/setTimeout");
-            });
-    });
+    const url = '/authenticate?code=' + code;
+    console.log(url);
+    fetch(url)
+        .then(res => res.json())
+        .then(data => {
+            console.log(data);
+            spotifyApi.setAccessToken(data.access_token);
+            accessToken = {
+                access_token: data.access_token,
+                refresh_token: data.refresh_token
+            }
+            loggedIn = true;
+            history.push("/setTimeout");
+        })
+        .catch(err => {
+            console.log(err);
+        });
 }
 
 function checkState(): boolean {
