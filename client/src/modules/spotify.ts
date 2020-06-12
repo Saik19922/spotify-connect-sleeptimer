@@ -30,7 +30,7 @@ function checkAuth(history: any, code: string): any {
                 refresh_token: data.refresh_token
             }
             loggedIn = true;
-            history.push("http://192.168.178.39:3001/setTimeout");
+            history.push("/setTimeout");
         })
         .catch(err => {
             console.log(err);
