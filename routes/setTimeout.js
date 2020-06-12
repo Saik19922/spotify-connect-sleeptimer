@@ -27,7 +27,7 @@ router.get('/', cors(), async function (req, res, next) {
     spotifyApi.setAccessToken(codePair.access_token);
     spotifyApi.setRefreshToken(codePair.refresh_token);
 
-    var start = Date.now();
+    var start = new Date();
 
     switch (type) {
         case 0:
@@ -38,7 +38,7 @@ router.get('/', cors(), async function (req, res, next) {
             start.setMinutes(start.getMinutes() + 30);
             console.log('Stop scheduled at ' + start);
             // Reauth after 29 minutes.
-            rd = Date.now();
+            rd = new Date();
             rd.setMinutes(rd.getMinutes() + 29);
             var reauth = schedule.scheduleJob(rd, function () {
                 spotifyApi.refreshAccessToken().then(
@@ -52,7 +52,7 @@ router.get('/', cors(), async function (req, res, next) {
             start.setMinutes(start.getMinutes() + 45);
             console.log('Stop scheduled at ' + start);
             // Reauth after 29 minutes.
-            rd = Date.now();
+            rd = new Date();
             rd.setMinutes(rd.getMinutes() + 29);
             var reauth = schedule.scheduleJob(rd, function () {
                 spotifyApi.refreshAccessToken().then(
@@ -66,8 +66,8 @@ router.get('/', cors(), async function (req, res, next) {
             start.setMinutes(start.getMinutes() + 60);
             console.log('Stop scheduled at ' + start);
             // Reauth after 29 minutes.
-            rd1 = Date.now();
-            rd2 = Date.now();
+            rd1 = new Date();
+            rd2 = new Date();
             rd1.setMinutes(rd.getMinutes() + 29);
             rd2.setMinutes(rd.getMinutes() + 59);
             var reauth1 = schedule.scheduleJob(rd1, function () {
