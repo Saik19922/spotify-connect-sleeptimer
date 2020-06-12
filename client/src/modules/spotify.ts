@@ -17,7 +17,11 @@ function checkAuth(history: any, code: string): any {
     const url = '/authenticate?code=' + code;
     console.log(url);
     fetch(url)
-        .then(res => res.json())
+        .then(res => {
+            console.log(res);
+            console.log(res.json());
+            return res.json();
+        })
         .then(data => {
             console.log(data);
             spotifyApi.setAccessToken(data.access_token);
