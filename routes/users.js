@@ -1,8 +1,9 @@
 var express = require('express');
+var cors = require('cors')
 var router = express.Router();
 
 /* GET users listing. */
-router.get('/', function (req, res, next) {
+router.get('/', cors(), function (req, res, next) {
   //res.send('respond with a resource');
 
   // Arbitrary test data
