@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var cors = require('cors')
 var schedule = require('node-schedule');
 
 var SpotifyWebApi = require('spotify-web-api-node');
@@ -13,7 +14,7 @@ var credentials = {
 var spotifyApi = new SpotifyWebApi(credentials);
 
 /* GET users listing. */
-router.get('/', async function (req, res, next) {
+router.get('/', cors(), async function (req, res, next) {
     var type = parseInt(req.query.timeoutType);
     var codePair = {
         access_token: req.query.accessToken,

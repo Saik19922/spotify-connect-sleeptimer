@@ -1,4 +1,5 @@
 var express = require('express');
+var cors = require('cors')
 var router = express.Router();
 
 var SpotifyWebApi = require('spotify-web-api-node');
@@ -12,7 +13,7 @@ var credentials = {
 var spotifyApi = new SpotifyWebApi(credentials);
 
 /* GET users listing. */
-router.get('/', async function (req, res, next) {
+router.get('/', cors(), async function (req, res, next) {
     var code = req.query.code;
     spotifyApi.authorizationCodeGrant(code).then(
         function (data) {
