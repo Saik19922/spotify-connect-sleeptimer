@@ -21,39 +21,73 @@ router.get('/', cors(), async function (req, res, next) {
         refresh_token: req.query.refreshToken
     };
 
-    const timeMult = 60*1000;
-    const reauthTimer = 1740*1000;
+    const timeMult = 60 * 1000;
+    const reauthTimer = 1740 * 1000;
     var startTime;
 
     // Setup spotify API with proper token
     spotifyApi.setAccessToken(codePair.access_token);
-    
-    switch(type) {
+    spotifyApi.setRefreshToken(codePair.refresh_token);
+
+    switch (type) {
         case 0:
-            console.log('Stop in 15 min', codePair);
-            startTime = Date(Date.now() + 60000);
+            startTime = Date(Date.now() + (timeMult * 15));
+            console.log('Stop scheduled at ' + startTime);
             break;
         case 1:
-            console.log('Stop in 30 min.', codePair);
-            startTime = Date(Date.now() + 120000);
+            startTime = Date(Date.now() + (timeMult * 30));
+            console.log('Stop scheduled at ' + startTime);
+            // Reauth after 29 minutes.
+            reauthDelay = Date(Date.now() + reauthTimer);
+            var reauth = schedule.scheduleJob({ start: reauthDelay }, function () {
+                spotifyApi.refreshAccessToken().then(
+                    function (data) {
+                        spotifyApi.setAccessToken(data.body.access_token);
+                    }
+                );
+            });
             break;
         case 2:
-            console.log('Stop in 45 min.', codePair);
-            startTime = Date(Date.now() + 180000);
+            startTime = Date(Date.now() + (timeMult * 45));
+            console.log('Stop scheduled at ' + startTime);
+            // Reauth after 29 minutes.
+            reauthDelay = Date(Date.now() + reauthTimer);
+            var reauth = schedule.scheduleJob({ start: reauthDelay }, function () {
+                spotifyApi.refreshAccessToken().then(
+                    function (data) {
+                        spotifyApi.setAccessToken(data.body.access_token);
+                    }
+                );
+            });
             break;
         case 3:
-            console.log('Stop in 60 min.', codePair);
-            startTime = Date(Date.now() + 240000);
+            startTime = Date(Date.now() + (timeMult * 60));
+            console.log('Stop scheduled at ' + startTime);
+            // Reauth after 29 and 58 minutes.
+            reauthDelay1 = Date(Date.now() + reauthTimer);
+            reauthDelay2 = Date(Date.now() + (reauthTimer * 2));
+            var reauth1 = schedule.scheduleJob({ start: reauthDelay1 }, function () {
+                spotifyApi.refreshAccessToken().then(
+                    function (data) {
+                        spotifyApi.setAccessToken(data.body.access_token);
+                    }
+                );
+            });
+            var reauth2 = schedule.scheduleJob({ start: reauthDelay2 }, function () {
+                spotifyApi.refreshAccessToken().then(
+                    function (data) {
+                        spotifyApi.setAccessToken(data.body.access_token);
+                    }
+                );
+            });
             break;
         default:
             console.log('Default');
             break;
     }
 
-    console.log(startTime.toString());
-
     //TODO: Re-auth logic
-    var job = schedule.scheduleJob({ start: startTime }, function() {
+    var job = schedule.scheduleJob({ start: startTime }, function () {
         spotifyApi.pause();
     });
     res.send(200);
