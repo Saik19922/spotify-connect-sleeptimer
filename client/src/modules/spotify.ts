@@ -14,7 +14,7 @@ function Auth() {
 }
 
 function checkAuth(history: any, code: string): any {
-    const url = '/authenticate?code=' + code;
+    const url = 'http://192.168.178.39:3001/authenticate?code=' + code;
     console.log(url);
     fetch(url)
         .then(res => {
@@ -30,7 +30,7 @@ function checkAuth(history: any, code: string): any {
                 refresh_token: data.refresh_token
             }
             loggedIn = true;
-            history.push("/setTimeout");
+            history.push("http://192.168.178.39:3001/setTimeout");
         })
         .catch(err => {
             console.log(err);
