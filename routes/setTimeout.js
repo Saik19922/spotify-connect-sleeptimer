@@ -21,25 +21,26 @@ router.get('/', cors(), async function (req, res, next) {
         refresh_token: req.query.refreshToken
     };
 
-    const timeMult = 60 * 1000;
-    const reauthTimer = 1740 * 1000;
     var startTime;
 
     // Setup spotify API with proper token
     spotifyApi.setAccessToken(codePair.access_token);
     spotifyApi.setRefreshToken(codePair.refresh_token);
 
+    var start = Date.now();
+
     switch (type) {
         case 0:
-            startTime = Date(Date.now() + (timeMult * 15));
-            console.log('Stop scheduled at ' + startTime);
+            start.setMinutes(start.getMinutes() + 15);
+            console.log('Stop scheduled at ' + start);
             break;
         case 1:
-            startTime = Date(Date.now() + (timeMult * 30));
-            console.log('Stop scheduled at ' + startTime);
+            start.setMinutes(start.getMinutes() + 30);
+            console.log('Stop scheduled at ' + start);
             // Reauth after 29 minutes.
-            reauthDelay = Date(Date.now() + reauthTimer);
-            var reauth = schedule.scheduleJob({ start: reauthDelay }, function () {
+            rd = Date.now();
+            rd.setMinutes(rd.getMinutes() + 29);
+            var reauth = schedule.scheduleJob(rd, function () {
                 spotifyApi.refreshAccessToken().then(
                     function (data) {
                         spotifyApi.setAccessToken(data.body.access_token);
@@ -48,11 +49,12 @@ router.get('/', cors(), async function (req, res, next) {
             });
             break;
         case 2:
-            startTime = Date(Date.now() + (timeMult * 45));
-            console.log('Stop scheduled at ' + startTime);
+            start.setMinutes(start.getMinutes() + 45);
+            console.log('Stop scheduled at ' + start);
             // Reauth after 29 minutes.
-            reauthDelay = Date(Date.now() + reauthTimer);
-            var reauth = schedule.scheduleJob({ start: reauthDelay }, function () {
+            rd = Date.now();
+            rd.setMinutes(rd.getMinutes() + 29);
+            var reauth = schedule.scheduleJob(rd, function () {
                 spotifyApi.refreshAccessToken().then(
                     function (data) {
                         spotifyApi.setAccessToken(data.body.access_token);
@@ -61,19 +63,21 @@ router.get('/', cors(), async function (req, res, next) {
             });
             break;
         case 3:
-            startTime = Date(Date.now() + (timeMult * 60));
-            console.log('Stop scheduled at ' + startTime);
-            // Reauth after 29 and 58 minutes.
-            reauthDelay1 = Date(Date.now() + reauthTimer);
-            reauthDelay2 = Date(Date.now() + (reauthTimer * 2));
-            var reauth1 = schedule.scheduleJob({ start: reauthDelay1 }, function () {
+            start.setMinutes(start.getMinutes() + 60);
+            console.log('Stop scheduled at ' + start);
+            // Reauth after 29 minutes.
+            rd1 = Date.now();
+            rd2 = Date.now();
+            rd1.setMinutes(rd.getMinutes() + 29);
+            rd2.setMinutes(rd.getMinutes() + 59);
+            var reauth1 = schedule.scheduleJob(rd1, function () {
                 spotifyApi.refreshAccessToken().then(
                     function (data) {
                         spotifyApi.setAccessToken(data.body.access_token);
                     }
                 );
             });
-            var reauth2 = schedule.scheduleJob({ start: reauthDelay2 }, function () {
+            var reauth2 = schedule.scheduleJob(rd2, function () {
                 spotifyApi.refreshAccessToken().then(
                     function (data) {
                         spotifyApi.setAccessToken(data.body.access_token);
@@ -87,10 +91,10 @@ router.get('/', cors(), async function (req, res, next) {
     }
 
     //TODO: Re-auth logic
-    var job = schedule.scheduleJob({ start: startTime }, function () {
+    var job = schedule.scheduleJob(start, function () {
         spotifyApi.pause();
     });
-    res.send(200);
+    res.sendStatus(200);
 });
 
 module.exports = router;
