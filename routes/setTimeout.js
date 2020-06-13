@@ -6,9 +6,9 @@ var schedule = require('node-schedule');
 var SpotifyWebApi = require('spotify-web-api-node');
 
 var credentials = {
-    clientId: 'clientId',
-    clientSecret: 'clientSecret',
-    redirectUri: 'http://ip:port/auth'
+    clientId: process.env.CLIENTID,
+    clientSecret: process.env.CLIENTSECRET,
+    redirectUri: process.env.REDIRECT
 };
 
 var spotifyApi = new SpotifyWebApi(credentials);
