@@ -28,6 +28,9 @@ app.use('/users', usersRouter);
 app.use('/authenticate', authenticateRouter);
 app.use('/timeout', setTimeout);
 
+// ENV variables logging
+console.log(process.env.CLIENTID, process.env.CLIENTSECRET, process.env.REDIRECT);
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
