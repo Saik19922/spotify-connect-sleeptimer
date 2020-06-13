@@ -70,8 +70,8 @@ router.get('/', cors(), async function (req, res, next) {
             // Reauth after 29 minutes.
             rd1 = new Date();
             rd2 = new Date();
-            rd1.setMinutes(rd.getMinutes() + 29);
-            rd2.setMinutes(rd.getMinutes() + 59);
+            rd1.setMinutes(rd1.getMinutes() + 29);
+            rd2.setMinutes(rd2.getMinutes() + 59);
             var reauth1 = schedule.scheduleJob(rd1, function () {
                 spotifyApi.refreshAccessToken().then(
                     function (data) {
