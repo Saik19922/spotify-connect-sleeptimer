@@ -43,6 +43,7 @@ router.get('/', cors(), async function (req, res, next) {
             var reauth = schedule.scheduleJob(rd, function () {
                 spotifyApi.refreshAccessToken().then(
                     function (data) {
+                        console.log("Refreshed." + data.statusCode);
                         spotifyApi.setAccessToken(data.body.access_token);
                     }
                 );
@@ -57,6 +58,7 @@ router.get('/', cors(), async function (req, res, next) {
             var reauth = schedule.scheduleJob(rd, function () {
                 spotifyApi.refreshAccessToken().then(
                     function (data) {
+                        console.log("Refreshed." + data.statusCode);
                         spotifyApi.setAccessToken(data.body.access_token);
                     }
                 );
@@ -73,6 +75,7 @@ router.get('/', cors(), async function (req, res, next) {
             var reauth1 = schedule.scheduleJob(rd1, function () {
                 spotifyApi.refreshAccessToken().then(
                     function (data) {
+                        console.log("Refreshed." + data.statusCode);
                         spotifyApi.setAccessToken(data.body.access_token);
                     }
                 );
@@ -80,6 +83,7 @@ router.get('/', cors(), async function (req, res, next) {
             var reauth2 = schedule.scheduleJob(rd2, function () {
                 spotifyApi.refreshAccessToken().then(
                     function (data) {
+                        console.log("Refreshed." + data.statusCode);
                         spotifyApi.setAccessToken(data.body.access_token);
                     }
                 );
@@ -92,7 +96,12 @@ router.get('/', cors(), async function (req, res, next) {
 
     //TODO: Re-auth logic
     var job = schedule.scheduleJob(start, function () {
-        spotifyApi.pause();
+        console.log("Pausing now.");
+        spotifyApi.pause().then(
+            function (data) {
+                console.log(data.statusCode, data.body);
+            }
+        );
     });
     res.sendStatus(200);
 });
